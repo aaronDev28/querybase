@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+/>
+    <title>Upload CSV</title>
+</head>
+<body>
+    <main class="container" style="width: 70%; margin-top: 30px;">
+    <h2 style="text-align: center; margin-bottom: 50px;">Welcome to QueryBase</h2>
+    <hr>
+    <h4>Upload CSV File</h4>
+    <form method="post" enctype="multipart/form-data" action="/upload">
+        <input type="file" name="file" accept=".csv">
+        <input type="submit" value="Upload">
+    </form>
+    <!-- <h4 style="text-align: center;">OR</h4> 
+    <h4>Enter Kaggle Dataset</h4>
+    <form method="post" action="/download">
+        <label for="kaggle_link">Kaggle URL:</label>
+        <input type="text" id="kaggle_link" name="kaggle_link">
+        <label for="dataset_name">Filename:</label>
+        <input type="text" id="dataset_name" name="dataset_name">
+        <input type="submit" value="Upload">
+    </form> -->
+    <hr>    
+</main>
+</body>
+</html>

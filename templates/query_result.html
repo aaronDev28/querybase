@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+/>
+    <title>Query Result</title>
+    
+</head>
+<body>
+    <main class="container" style="width: 90%; margin-top: 30px;">
+    <h2 style="text-align: center; margin-bottom: 50px;">Query Result</h2>
+    {% if result_data %}
+    <form method="post" action="/download_csv">
+        <input type="hidden" name="query" value="{{ query }}">
+        <button type="submit">Download as CSV</button>
+    </form>
+    <div class="overflow-auto">
+    <table border="1">
+        <thead data-theme="dark">
+            <tr>
+                {% for column in result_data[0].keys() %}
+                    <th scope="col">{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in result_data %}
+                <tr>
+                    {% for value in row.values() %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    {% else %}
+        <h4>{{ message }}</h4>
+    {% endif %}
+</main>
+</div>
+</body>
+</html>
