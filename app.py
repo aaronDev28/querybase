@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 from sqlalchemy import text, inspect
 from io import BytesIO
+from socket import gethostname
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -10,14 +11,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'aaron'
 db = SQLAlchemy(app)
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    if 'file' not in request.files: 
+    if 'file' not in request.files:
         return redirect(request.url)
     file = request.files['file']
     if file.filename == '':
@@ -38,7 +38,7 @@ def query_page():
     inspector = inspect(db.engine)
     columns = inspector.get_columns('data')  # Assuming 'data' is the name of your table
     column_info = [(column['name'], column['type']) for column in columns]
-    
+
     return render_template('query.html', column_info=column_info)
 
 
@@ -49,7 +49,7 @@ def execute_query():
         result = con.execute(query)
         column_names = result.keys()
         result_data = [dict(zip(column_names, row)) for row in result]
-    
+
     if not result_data:
         message = "No Rows."
         return render_template('query_result.html', message=message)
@@ -61,7 +61,7 @@ def execute_query():
 @app.route('/download_csv', methods=['POST'])
 def download_csv():
     result_data = session.pop('result_data', None)
-    
+
     if not result_data:
         return "No data to download."
     else:
@@ -69,11 +69,11 @@ def download_csv():
         df = pd.DataFrame(result_data)
         # Set up response headers for CSV download
         csv_data = df.to_csv(index=False)
-        
+
         csv_buffer = BytesIO()
         csv_buffer.write(csv_data.encode())
         csv_buffer.seek(0)
-        
+
         return send_file(
             csv_buffer,
             mimetype='text/csv',
@@ -81,5 +81,7 @@ def download_csv():
             download_name='data.csv'
         )
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    db.create_all()
+    if 'liveconsole' not in gethostname():
+        app.run()
