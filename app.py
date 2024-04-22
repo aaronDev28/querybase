@@ -60,7 +60,7 @@ def execute_query():
 
 @app.route('/download_csv', methods=['POST'])
 def download_csv():
-    result_data = session.pop('result_data', None)
+    result_data = session.get('result_data', None)
 
     if not result_data:
         return "No data to download."
